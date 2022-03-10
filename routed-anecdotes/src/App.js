@@ -3,38 +3,57 @@ import {
   Routes, Route, Link, useMatch, useNavigate
 } from 'react-router-dom'
 import { useField } from './hooks'
+import { Table, Form, Button, Alert, Navbar, Container, Nav } from 'react-bootstrap'
 
 const Menu = () => {
-  const padding = {
-    paddingRight: 5
-  }
   return (
-    <div>
-      <Link style={padding} to="/anecdotes">anecdotes</Link>
-      <Link style={padding} to="/create">create new</Link>
-      <Link style={padding} to="/about">about</Link>
-    </div>
+      <Navbar bg="dark" variant="dark">
+        <Container>
+        <Nav className="me-auto">
+          <Nav.Link  href="/anecdotes">anecdotes</Nav.Link>
+          <Nav.Link  href="/create">create new</Nav.Link>
+          <Nav.Link href="/about">about</Nav.Link>
+        </Nav>
+        </Container>
+      </Navbar>
   )
 }
 
 const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
-    <ul>
+    <Table striped>
+      <tbody>
+        {anecdotes.map(anecdote => 
+          <tr key={anecdote.id} >
+            <td>
+              <Link to={`/anecdotes/${anecdote.id}`}>
+                {anecdote.content}
+              </Link>
+            </td>
+            <td>
+              {anecdote.author}
+            </td>
+          </tr>
+        )} 
+      </tbody>
+    </Table>
+    {/* <ul>
       {anecdotes.map(anecdote => 
         <li key={anecdote.id} >
           <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
         </li>
       )}
-    </ul>
+    </ul> */}
   </div>
 )
+      
 
 const Anecdote = ({ anecdote }) => (
   <div>
     <h2>{anecdote.content}</h2>
     <p>has {anecdote.votes} votes</p>
-    <p>for more info see <a href={anecdote.info}>{anecdote.info}</a></p>
+    <p>for more info see <a href={anecdote.info} target="blank">{anecdote.info}</a></p>
   </div>
 )
 
@@ -61,9 +80,9 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-  const content = useField('content')
-  const author = useField('author')
-  const info = useField('info')
+  const content = useField('text')
+  const author = useField('text')
+  const info = useField('url')
 
   const navigate = useNavigate()
 
@@ -87,22 +106,22 @@ const CreateNew = (props) => {
   return (
     <div>
       <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit} onReset={handleReset}>
-        <div>
-          content
-          <input {...content.inputValues()} />
-        </div>
-        <div>
-          author
-          <input {...author.inputValues()} />
-        </div>
-        <div>
-          url for more info
-          <input {...info.inputValues()} />
-        </div>
-        <button type='submit'>create</button>
-        <button type='reset'>reset</button>
-      </form>
+      <Form onSubmit={handleSubmit} onReset={handleReset}>
+        <Form.Group>
+          <Form.Label>content</Form.Label>
+          <Form.Control {...content.inputValues()} />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>author</Form.Label>
+          <Form.Control {...author.inputValues()} />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>info</Form.Label>
+          <Form.Control {...info.inputValues()} />
+        </Form.Group>
+        <Button className="mr-2" variant="primary" type="submit">create</Button>{' '}
+        <Button variant="secondary" type="reset">reset</Button>
+      </Form>
     </div>
   )
 
@@ -159,10 +178,14 @@ const App = () => {
   }
 
   return (
-    <div>
+    <div className="container">
       <h1>Software anecdotes</h1>
       <Menu />
-      {notification}
+      {notification && 
+        <Alert variant="success">
+          {notification}
+        </Alert>
+      }
       <Routes>
         <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />} />
         <Route path="/about" element={<About/>} />
