@@ -30,9 +30,9 @@ const mostBlogs = (blogs) => {
   return blogs.length === 0
     ? null
     : {
-        author: authorWithMostBlogs,
-        blogs: countedAuthors[authorWithMostBlogs],
-      }
+      author: authorWithMostBlogs,
+      blogs: countedAuthors[authorWithMostBlogs],
+    }
 }
 
 const mostLikes = (blogs) => {
@@ -50,9 +50,9 @@ const mostLikes = (blogs) => {
   return blogs.length === 0
     ? null
     : {
-        author: authorWithMostLikes,
-        likes: authorsByLikes[authorWithMostLikes],
-      }
+      author: authorWithMostLikes,
+      likes: authorsByLikes[authorWithMostLikes],
+    }
 }
 
 module.exports = {

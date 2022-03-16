@@ -1,22 +1,29 @@
-import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { createBlog } from '../reducers/blogsReducer'
+import { createNotification } from '../reducers/notificationReducer'
 
-const BlogForm = ({ createBlog }) => {
-  const [blogTitle, setBlogTitle] = useState('')
-  const [blogAuthor, setBlogAuthor] = useState('')
-  const [blogUrl, setBlogUrl] = useState('')
+const BlogForm = () => {
+  const dispatch = useDispatch()
 
-  const addBlog = (event) => {
+  const addBlog = async (event) => {
     event.preventDefault()
-    createBlog({
-      title: blogTitle,
-      author: blogAuthor,
-      url: blogUrl,
-      likes: 0,
-    })
+    const title = event.target.title.value
+    const author = event.target.author.value
+    const url = event.target.url.value
 
-    setBlogTitle('')
-    setBlogAuthor('')
-    setBlogUrl('')
+    event.target.title.value = ''
+    event.target.author.value = ''
+    event.target.url.value = ''
+
+    const newBlog = { title, author, url }
+    console.log('newBlog in addBlog', newBlog)
+    dispatch(createBlog(newBlog))
+    dispatch(
+      createNotification(
+        { text: `A new blog ${title} by ${author} added`, type: 'info' },
+        3
+      )
+    )
   }
 
   return (
@@ -28,9 +35,7 @@ const BlogForm = ({ createBlog }) => {
           <input
             type="text"
             id="title-input"
-            value={blogTitle}
-            name="Title"
-            onChange={(e) => setBlogTitle(e.target.value)}
+            name="title"
             placeholder="write the title of the blog"
           />
         </div>
@@ -39,9 +44,7 @@ const BlogForm = ({ createBlog }) => {
           <input
             type="text"
             id="author-input"
-            value={blogAuthor}
-            name="Author"
-            onChange={(e) => setBlogAuthor(e.target.value)}
+            name="author"
             placeholder="write the author"
           />
         </div>
@@ -50,9 +53,7 @@ const BlogForm = ({ createBlog }) => {
           <input
             type="text"
             id="url-input"
-            value={blogUrl}
-            name="URL"
-            onChange={(e) => setBlogUrl(e.target.value)}
+            name="url"
             placeholder="write blog's url"
           />
         </div>
@@ -63,5 +64,7 @@ const BlogForm = ({ createBlog }) => {
     </div>
   )
 }
+
+
 
 export default BlogForm

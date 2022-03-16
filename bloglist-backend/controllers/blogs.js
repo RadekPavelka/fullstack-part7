@@ -20,7 +20,6 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
     user = user[0]
   }
 
-  // Build the blog object with the related user
   const blog = new Blog({
     title: request.body.title,
     author: request.body.author,
@@ -29,7 +28,6 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
     user: user._id,
   })
 
-  // Return 400 Bad request if title and URL are missing
   if (!blog.title && !blog.url) {
     response.status(400)
   }
@@ -63,7 +61,7 @@ blogsRouter.put('/:id', middleware.userExtractor, async (request, response) => {
     request.params.id,
     blogToBeUpdated,
     opts
-  )
+  ).populate('user', { username: 1, name: 1 })
   response.json(updatedBlog)
 })
 
@@ -73,24 +71,20 @@ blogsRouter.delete(
   async (request, response) => {
     const user = request.user
 
-    // Get the blog to get its author
     const blog = await Blog.findById(request.params.id)
 
-    // Check of blog exists
     if (!blog) {
       return response.status(400).json({
         error: 'The blog you are trying to delete does not exists',
       })
     }
 
-    // Blog can only be deleted by its author
     if (!request.token || user.id.toString() !== blog.user.toString()) {
       return response.status(400).json({
         error: 'You can not delete the blog because you are not the author',
       })
     }
 
-    // Delete the blog
     await Blog.findByIdAndRemove(request.params.id)
 
     response.status(204).end()

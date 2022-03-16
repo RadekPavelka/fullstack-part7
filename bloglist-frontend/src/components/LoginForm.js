@@ -1,40 +1,38 @@
-import React, { useState } from 'react'
+import Notification from './Notification'
+import { useDispatch } from 'react-redux'
+import { loginUser } from '../reducers/userReducer'
 
-const LoginForm = ({ message, loginUser }) => {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+const LoginForm = () => {
+  //const [username, setUsername] = useState('')
+  //const [password, setPassword] = useState('')
+
+  const dispatch = useDispatch()
 
   const handleLogin = (event) => {
     event.preventDefault()
-    loginUser(username, password)
-    setUsername('')
-    setPassword('')
+    const username = event.target.username.value
+    const password = event.target.password.value
+
+    const user = { username, password }
+
+    dispatch(loginUser(user))
+
+    event.target.username.value = ''
+    event.target.password.value = ''
   }
 
   return (
     <div>
       <h2>Log in to application</h2>
-      <p>{message}</p>
+      <Notification />
       <form onSubmit={handleLogin}>
         <div>
           username
-          <input
-            id="username"
-            type="text"
-            value={username}
-            name="Username"
-            onChange={({ target }) => setUsername(target.value)}
-          />
+          <input id="username" type="text" name="username" />
         </div>
         <div>
           password
-          <input
-            id="password"
-            type="password"
-            value={password}
-            name="Password"
-            onChange={({ target }) => setPassword(target.value)}
-          />
+          <input id="password" type="password" name="password" />
         </div>
         <button id="login-button" type="submit">
           login

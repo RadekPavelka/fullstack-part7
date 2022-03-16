@@ -16,6 +16,8 @@ module.exports = {
   },
   plugins: ['react', 'jest', 'cypress'],
   rules: {
+    'react/jsx-uses-react': 'off',
+    'react/react-in-jsx-scope': 'off',
     indent: ['error', 2],
     'linebreak-style': ['error', 'unix'],
     quotes: ['error', 'single'],

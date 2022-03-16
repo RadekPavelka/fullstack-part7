@@ -1,19 +1,18 @@
-import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { likeBlog, deleteBlog } from '../reducers/blogsReducer'
 
-const Blog = ({ blog, currentUser, likeBlog, deleteBlog }) => {
-  const [detailsVisible, setDetailsVisible] = useState(false)
+const Blog = ({ blog, loggedInUser }) => {
 
-  const toggleVisibility = () => {
-    setDetailsVisible(!detailsVisible)
-  }
+  const dispatch = useDispatch()
 
   const incrementLikes = () => {
-    likeBlog(blog)
+    dispatch(likeBlog(blog))
   }
 
   const removeBlog = () => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author} ?`)) {
-      deleteBlog(blog.id)
+      console.log(blog)
+      dispatch(deleteBlog(blog))
     }
   }
 
@@ -25,49 +24,29 @@ const Blog = ({ blog, currentUser, likeBlog, deleteBlog }) => {
     marginBottom: 5,
   }
 
+  if (!blog) {
+    return null
+  }
+
   return (
     <div className="blog" style={blogStyle}>
-      {detailsVisible ? (
-        <div>
-          {blog.title} {blog.author}{' '}
-          <button
-            className="hide-button"
-            onClick={toggleVisibility}
-            type="button"
-          >
-            hide
-          </button>{' '}
-          <br />
-          {blog.url}
-          <br />
-          likes: {blog.likes}{' '}
-          <button
-            className="like-button"
-            onClick={incrementLikes}
-            type="button"
-          >
-            like
-          </button>{' '}
-          <br />
-          user: {blog.user.username} <br />
-          {currentUser === blog.user.username && (
-            <button className="remove-button" onClick={removeBlog}>
-              remove
-            </button>
-          )}
-        </div>
-      ) : (
-        <div>
-          {blog.title} {blog.author}
-          <button
-            onClick={toggleVisibility}
-            className="view-button"
-            type="button"
-          >
-            view
+      <div>
+        {blog.title} {blog.author}{' '}
+        <br />
+        {blog.url}
+        <br />
+        likes: {blog.likes}{' '}
+        <button className="like-button" onClick={incrementLikes} type="button">
+          like
+        </button>{' '}
+        <br />
+        user: {blog.user.username} <br />
+        {loggedInUser.username === blog.user.username && (
+          <button className="remove-button" onClick={removeBlog}>
+            remove
           </button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }
