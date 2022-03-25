@@ -1,19 +1,18 @@
 import { useEffect } from 'react'
 import BlogList from './components/BlogList'
-//import BlogForm from './components/BlogForm'
 import blogService from './services/blogs'
-//import Togglable from './components/Togglable'
 import LoginForm from './components/LoginForm'
 import Menu from './components/Menu'
 import Notification from './components/Notification'
-import BlogView from './components/BlogView'
+import Blog from './components/Blog'
+import User from './components/User'
+import Users from './components/Users'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from './reducers/userReducer'
-import { Routes, Route, Link, useMatch } from 'react-router-dom'
+import { Routes, Route, useMatch } from 'react-router-dom'
 import _ from 'lodash'
 
-const User = ({ user }) => {
-  console.log('user in User', user)
+/* const User = ({ user }) => {
   const usersBlogs = useSelector((state) =>
     state.blogs.filter((b) => b.user.username === user.username)
   )
@@ -32,8 +31,8 @@ const User = ({ user }) => {
     </div>
   )
 }
-
-const Users = ({ users }) => {
+ */
+/* const Users = ({ users }) => {
   return (
     users && (
       <div>
@@ -59,7 +58,7 @@ const Users = ({ users }) => {
       </div>
     )
   )
-}
+} */
 
 const App = () => {
   const loggedUser = useSelector((state) => state.user)
@@ -69,7 +68,6 @@ const App = () => {
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-    console.log(loggedUserJSON)
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       blogService.setToken(user.token)
@@ -90,12 +88,6 @@ const App = () => {
     }
 
     return usersList
-    /*     let usersAndBlogs = {}
-    for (const u of usersList ) {
-      usersAndBlogs[u] = usersAndBlogs[u] ? usersAndBlogs[u] + 1 : 1
-    }
-    console.log('usersAndBlogs',usersAndBlogs)
-    return usersAndBlogs */
   })
 
   const blogs = useSelector((state) => state.blogs)
@@ -109,14 +101,6 @@ const App = () => {
 
   const user = userMatch ? userById(userMatch.params.id) : null
   const blog = blogMatch ? blogById(blogMatch.params.id) : null
-
-  /*   const blogFormRef = useRef()
-
-  const TogglableBlogForm = () => (
-    <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-      <BlogForm />
-    </Togglable>
-  ) */
 
   if (loggedUser === null) {
     return <LoginForm />
@@ -133,7 +117,7 @@ const App = () => {
         <Route path="/users" element={<Users users={users} />} />
         <Route path="/users/:id" element={<User user={user} />} />
         <Route path="/blogs" element={<BlogList />} />
-        <Route path="/blogs/:id" element={<BlogView blog={blog} />} />
+        <Route path="/blogs/:id" element={<Blog blog={blog} />} />
       </Routes>
     </div>
   )

@@ -16,7 +16,6 @@ const BlogForm = () => {
     event.target.url.value = ''
 
     const newBlog = { title, author, url }
-    console.log('newBlog in addBlog', newBlog)
     dispatch(createBlog(newBlog))
     dispatch(
       createNotification(
@@ -64,7 +63,5 @@ const BlogForm = () => {
     </div>
   )
 }
-
-
 
 export default BlogForm

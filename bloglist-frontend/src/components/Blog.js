@@ -1,53 +1,85 @@
-// import { useDispatch } from 'react-redux'
-// import { likeBlog, deleteBlog } from '../reducers/blogsReducer'
+import { useDispatch, useSelector } from 'react-redux'
+import { likeBlog, deleteBlog } from '../reducers/blogsReducer'
+import { createComment } from '../reducers/blogsReducer'
+import { createNotification } from '../reducers/notificationReducer'
+import { useNavigate } from 'react-router-dom'
 
-// const Blog = ({ blog, loggedInUser }) => {
+const Blog = ({ blog }) => {
+  const navigate = useNavigate()
 
-//   const dispatch = useDispatch()
+  const dispatch = useDispatch()
+  const loggedInUser = useSelector((state) => state.user.username)
 
-//   const incrementLikes = () => {
-//     dispatch(likeBlog(blog))
-//   }
+  const incrementLikes = () => {
+    dispatch(likeBlog(blog))
+  }
 
-//   const removeBlog = () => {
-//     if (window.confirm(`Remove blog ${blog.title} by ${blog.author} ?`)) {
-//       console.log(blog)
-//       dispatch(deleteBlog(blog))
-//     }
-//   }
+  const removeBlog = () => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author} ?`)) {
+      dispatch(deleteBlog(blog))
+      dispatch(
+        createNotification(
+          {
+            text: `Blog ${blog.title} by ${blog.author} was removed!`,
+            type: 'info',
+          },
+          3
+        )
+      )
+      navigate('/')
+    }
+  }
 
-//   const blogStyle = {
-//     paddingTop: 10,
-//     paddingLeft: 2,
-//     border: 'solid',
-//     borderWidth: 1,
-//     marginBottom: 5,
-//   }
+  const addComment = async (event) => {
+    event.preventDefault()
+    const comment = event.target.comment.value
+    event.target.comment.value = ''
+    dispatch(createComment(blog, comment))
+    dispatch(
+      createNotification({ text: 'Your comment was added', type: 'info' }, 3)
+    )
+  }
 
-//   if (!blog) {
-//     return null
-//   }
+  if (!blog) {
+    return null
+  }
 
-//   return (
-//     <div className="blog" style={blogStyle}>
-//       <div>
-//         {blog.title} {blog.author}{' '}
-//         <br />
-//         {blog.url}
-//         <br />
-//         likes: {blog.likes}{' '}
-//         <button className="like-button" onClick={incrementLikes} type="button">
-//           like
-//         </button>{' '}
-//         <br />
-//         user: {blog.user.username} <br />
-//         {loggedInUser.username === blog.user.username && (
-//           <button className="remove-button" onClick={removeBlog}>
-//             remove
-//           </button>
-//         )}
-//       </div>
-//     </div>
-//   )
-// }
-// //export default Blog
+  return (
+    <div>
+      <h2>{blog.title}</h2>
+      <div>
+        <a href={blog.url} target="_blank" rel="noreferrer">
+          {blog.url}
+        </a>
+      </div>
+      <div>
+        {blog.likes} likes{' '}
+        <button className="like-button" onClick={incrementLikes}>
+          like
+        </button>
+      </div>
+      <div>added by {blog.user.username}</div>
+      {loggedInUser === blog.user.username && (
+        <button className="remove-button" onClick={removeBlog}>
+          remove
+        </button>
+      )}
+      <div>
+        <h3>Comments</h3>
+        <form onSubmit={addComment}>
+          <input type="text" id="coment-input" name="comment" />
+          <button id="comment-button" type="submit">
+            add comment
+          </button>
+        </form>
+        <ul>
+          {blog.comments.map((comment) => (
+            <li key={Math.random(1000)}>{comment}</li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  )
+}
+
+export default Blog

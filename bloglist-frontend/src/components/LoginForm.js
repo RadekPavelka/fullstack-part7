@@ -3,9 +3,6 @@ import { useDispatch } from 'react-redux'
 import { loginUser } from '../reducers/userReducer'
 
 const LoginForm = () => {
-  //const [username, setUsername] = useState('')
-  //const [password, setPassword] = useState('')
-
   const dispatch = useDispatch()
 
   const handleLogin = (event) => {

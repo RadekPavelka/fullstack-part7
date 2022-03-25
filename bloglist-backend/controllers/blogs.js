@@ -18,7 +18,7 @@ blogsRouter.get('/:id', async (request, response) => {
   if (blog) {
     response.json(blog)
   } else {
-    response.status(404).endd
+    response.status(404).end
   }
 })
 

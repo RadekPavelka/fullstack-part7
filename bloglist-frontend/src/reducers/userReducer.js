@@ -16,24 +16,27 @@ export const { setUser } = userSlice.actions
 
 export const loginUser = (user) => {
   return async (dispatch) => {
-    console.log('in loginUser function')
-    console.log('user', user)
     try {
       const loggedInUser = await loginService.login({
         username: user.username,
         password: user.password,
       })
-      console.log('loggedInUSer', loggedInUser)
       window.localStorage.setItem(
         'loggedBlogappUser',
         JSON.stringify(loggedInUser)
       )
       blogService.setToken(loggedInUser.token)
       dispatch(setUser(loggedInUser))
-      dispatch(createNotification({ text: `${loggedInUser.username} logged in!`, type: 'info' }, 5))
-
+      dispatch(
+        createNotification(
+          { text: `${loggedInUser.username} logged in!`, type: 'info' },
+          5
+        )
+      )
     } catch (e) {
-      dispatch(createNotification({ text: 'Wrong credentials', type: 'alert' }, 5))
+      dispatch(
+        createNotification({ text: 'Wrong credentials', type: 'alert' }, 5)
+      )
     }
   }
 }

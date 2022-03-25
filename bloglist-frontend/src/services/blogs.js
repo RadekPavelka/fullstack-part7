@@ -14,7 +14,6 @@ const get = (id) => {
 
 const getAll = async () => {
   const response = await axios.get(baseUrl)
-  console.log('response of getAll ', response.data)
   return response.data
 }
 
@@ -27,7 +26,9 @@ const create = (newObject) => {
 }
 
 const addComment = (blogId, newComment) => {
-  const request = axios.post(`${baseUrl}/${blogId}/comments`, { comment: newComment })
+  const request = axios.post(`${baseUrl}/${blogId}/comments`, {
+    comment: newComment,
+  })
   return request.then((response) => response.data)
 }
 
