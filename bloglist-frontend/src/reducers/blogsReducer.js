@@ -42,7 +42,6 @@ export const createBlog = (content) => {
 export const likeBlog = (blog) => {
   return async (dispatch) => {
     const likedBlog = await blogService.update(blog.id, { ...blog, likes: blog.likes + 1 })
-    console.log('likedBlog in reducer', likedBlog)
     dispatch(updateBlog(likedBlog))
   }
 }
@@ -52,6 +51,13 @@ export const deleteBlog = (blog) => {
     const blogToRemove = blog
     await blogService.remove(blogToRemove.id)
     dispatch(removeBlog(blogToRemove))
+  }
+}
+
+export const createComment = (blog, comment) => {
+  return async (dispatch) => {
+    const commentedBlog = await blogService.addComment(blog.id, comment)
+    dispatch(updateBlog(commentedBlog))
   }
 }
 

@@ -34,10 +34,6 @@ const User = ({ user }) => {
 }
 
 const Users = ({ users }) => {
-  //console.log(users)
-
-  //const uniqueUsers = _.uniqBy(users, 'id')
-
   return (
     users && (
       <div>
@@ -93,8 +89,6 @@ const App = () => {
       }
     }
 
-    console.log('returnedUsersList', usersList)
-
     return usersList
     /*     let usersAndBlogs = {}
     for (const u of usersList ) {
@@ -107,11 +101,7 @@ const App = () => {
   const blogs = useSelector((state) => state.blogs)
 
   const userById = (id) => {
-    console.log('users', users)
-    console.log('id', id)
     let foundUser = users.find((u) => u.id === id)
-
-    console.log('foundUser', foundUser)
     return foundUser
   }
 
