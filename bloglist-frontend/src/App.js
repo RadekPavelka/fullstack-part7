@@ -12,54 +12,6 @@ import { setUser } from './reducers/userReducer'
 import { Routes, Route, useMatch } from 'react-router-dom'
 import _ from 'lodash'
 
-/* const User = ({ user }) => {
-  const usersBlogs = useSelector((state) =>
-    state.blogs.filter((b) => b.user.username === user.username)
-  )
-  if (!user) {
-    return null
-  }
-  return (
-    <div>
-      <h2>{user.username}</h2>
-      <h3>added blogs</h3>
-      <ul>
-        {usersBlogs.map((blog) => (
-          <li key={blog.id}>{blog.title}</li>
-        ))}
-      </ul>
-    </div>
-  )
-}
- */
-/* const Users = ({ users }) => {
-  return (
-    users && (
-      <div>
-        <h2>Users</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>username</th>
-              <th>blogs created</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr key={user.id}>
-                <td>
-                  <Link to={`/users/${user.id}`}>{user.username}</Link>
-                </td>
-                <td>{user.noOfBlogs}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    )
-  )
-} */
-
 const App = () => {
   const loggedUser = useSelector((state) => state.user)
   const dispatch = useDispatch()
@@ -109,7 +61,6 @@ const App = () => {
   return (
     <div>
       <Menu />
-      <h2>blogs</h2>
       <Notification />
 
       <Routes>

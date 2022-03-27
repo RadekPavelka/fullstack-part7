@@ -3,6 +3,7 @@ import { likeBlog, deleteBlog } from '../reducers/blogsReducer'
 import { createComment } from '../reducers/blogsReducer'
 import { createNotification } from '../reducers/notificationReducer'
 import { useNavigate } from 'react-router-dom'
+import { Button, Form, Row, Col } from 'react-bootstrap'
 
 const Blog = ({ blog }) => {
   const navigate = useNavigate()
@@ -54,24 +55,34 @@ const Blog = ({ blog }) => {
       </div>
       <div>
         {blog.likes} likes{' '}
-        <button className="like-button" onClick={incrementLikes}>
+        <Button className="like-button" onClick={incrementLikes}>
           like
-        </button>
+        </Button>
       </div>
       <div>added by {blog.user.username}</div>
       {loggedInUser === blog.user.username && (
-        <button className="remove-button" onClick={removeBlog}>
+        <Button variant="danger" className="remove-button" onClick={removeBlog}>
           remove
-        </button>
+        </Button>
       )}
       <div>
         <h3>Comments</h3>
-        <form onSubmit={addComment}>
-          <input type="text" id="coment-input" name="comment" />
-          <button id="comment-button" type="submit">
-            add comment
-          </button>
-        </form>
+        <Form onSubmit={addComment}>
+          <Form.Group as={Row}>
+            <Col xs="auto">
+              <Form.Control id="comment-input" type="text" name="comment" />
+            </Col>
+            <Col xs="auto">
+              <Button
+                variant="outline-primary"
+                id="comment-button"
+                type="submit"
+              >
+                add comment
+              </Button>
+            </Col>
+          </Form.Group>
+        </Form>
         <ul>
           {blog.comments.map((comment) => (
             <li key={Math.random(1000)}>{comment}</li>

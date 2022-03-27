@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs } from '../reducers/blogsReducer'
 import Togglable from './Togglable'
 import BlogForm from './BlogForm'
-import { Link } from 'react-router-dom'
+import { LinkContainer } from 'react-router-bootstrap'
+import { ListGroup } from 'react-bootstrap'
 
 const BlogList = () => {
   const blogs = useSelector((state) => state.blogs)
@@ -15,14 +16,14 @@ const BlogList = () => {
     dispatch(initializeBlogs())
   }, [dispatch])
 
-  const blogStyle = {
+  /*   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
     border: 'solid',
     borderWidth: 1,
     marginBottom: 5,
   }
-
+ */
   const blogFormRef = useRef()
 
   const TogglableBlogForm = () => (
@@ -38,13 +39,15 @@ const BlogList = () => {
   return (
     <div>
       <TogglableBlogForm />
-      {sortedBlogs.map((blog) => (
-        <div style={blogStyle} key={blog.id}>
-          <Link to={`/blogs/${blog.id}`}>
-            {blog.title} {blog.author}
-          </Link>
-        </div>
-      ))}
+      <ListGroup>
+        {sortedBlogs.map((blog) => (
+          <LinkContainer to={`/blogs/${blog.id}`} key={blog.id}>
+            <ListGroup.Item action>
+              {blog.title} {blog.author}
+            </ListGroup.Item>
+          </LinkContainer>
+        ))}
+      </ListGroup>
     </div>
   )
 }
